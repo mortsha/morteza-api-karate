@@ -16,12 +16,14 @@ Feature: Create a new account
     And print response
 
   Scenario: Create a new account
+  	* def dataGenerate = Java.type('api.data.DataGenerator')
+  	* def autoEmail = dataGenerate.getEmail()
     Given path "/api/accounts/add-primary-account"
     And header Authorization = "Bearer " + response.token
     And request
       """
       {
-       "email": "Morteza.sharifi56@gmail.com",
+       "email": "#(autoEmail)",
        "firstName": "Morteza",
        "lastName": "Sharifi",
        "title": "Mr.",
@@ -35,4 +37,4 @@ Feature: Create a new account
     When method post
     Then status 201
     And print response
-    And assert response.email == "Morteza.sharifi56@gmail.com"
+    And assert response.email == autoEmail
